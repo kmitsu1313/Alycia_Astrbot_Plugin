@@ -1,0 +1,413 @@
+:root {
+  color-scheme: light;
+  --surface: #ffffff;
+  --surface-muted: #f5f6f8;
+  --text: #20232a;
+  --muted: #737985;
+  --border: #e3e5e9;
+  --accent: #6b63c7;
+  --accent-soft: #eeedff;
+  --danger: #b42318;
+  --shadow: 0 8px 26px rgb(34 38 52 / 5%);
+  font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #23252b;
+  --surface-muted: #2b2e35;
+  --text: #eceef2;
+  --muted: #a4a8b2;
+  --border: #3a3d45;
+  --accent: #b0aaff;
+  --accent-soft: #36334e;
+  --danger: #ff9a91;
+  --shadow: 0 8px 26px rgb(0 0 0 / 14%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+button,
+input,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+.page {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 28px clamp(16px, 3vw, 40px) 24px;
+}
+
+.topbar,
+.section-heading,
+.button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.topbar {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 6px;
+  font-size: clamp(24px, 3vw, 32px);
+}
+
+h2 {
+  margin-bottom: 5px;
+  font-size: 17px;
+}
+
+h3 {
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.subtitle,
+.section-heading p,
+footer {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.status-card {
+  display: flex;
+  min-height: 110px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  padding: 16px 18px;
+}
+
+.status-title,
+.status-detail {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status-value {
+  overflow: hidden;
+  font-size: 21px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.tab {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+.diary-layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.33fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 14px;
+}
+
+.diary-sidebar,
+.editor,
+.settings-card {
+  padding: 18px;
+}
+
+.diary-sidebar {
+  min-height: 480px;
+}
+
+.section-heading {
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.section-heading p {
+  line-height: 1.5;
+}
+
+input[type="date"],
+.config-field input,
+.config-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+input[type="date"] {
+  width: auto;
+  padding: 7px;
+}
+
+.diary-list {
+  display: grid;
+  gap: 4px;
+  max-height: 410px;
+  overflow: auto;
+}
+
+.diary-item {
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.diary-item:hover,
+.diary-item.selected {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.editor {
+  display: flex;
+  min-height: 480px;
+  flex-direction: column;
+}
+
+.editor-heading {
+  align-items: center;
+}
+
+.button-row {
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.button {
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.button-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+[data-theme="dark"] .button-primary {
+  color: #20202a;
+}
+
+.button-quiet {
+  background: var(--surface);
+}
+
+.diary-content {
+  width: 100%;
+  min-height: 350px;
+  flex: 1;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  line-height: 1.75;
+}
+
+.message {
+  min-height: 20px;
+  margin: 8px 0 0;
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.config-form {
+  display: grid;
+  gap: 14px;
+}
+
+.config-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.config-section h3 {
+  grid-column: 1 / -1;
+}
+
+.config-field {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.config-field > label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.config-field small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.toggle-field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.toggle-field input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+footer {
+  padding: 18px 2px 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@media (max-width: 900px) {
+  .status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .diary-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-sidebar {
+    min-height: auto;
+  }
+
+  .diary-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-height: 180px;
+  }
+}
+
+@media (max-width: 620px) {
+  .page {
+    padding: 18px 12px;
+  }
+
+  .topbar,
+  .editor-heading {
+    align-items: flex-start;
+  }
+
+  .section-heading {
+    flex-wrap: wrap;
+  }
+
+  .diary-list,
+  .config-section {
+    grid-template-columns: 1fr;
+  }
+
+  .config-section h3 {
+    grid-column: auto;
+  }
+}

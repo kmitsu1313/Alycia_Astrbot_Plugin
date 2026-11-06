@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alycia 日记</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ALYCIA JOURNAL</p>
+          <h1>日记与记录</h1>
+          <p class="subtitle">查看、编辑日记，管理插件运行配置。</p>
+        </div>
+        <button id="refresh" class="button button-quiet" type="button">刷新</button>
+      </header>
+
+      <section id="status" class="status-grid" aria-live="polite"></section>
+
+      <nav class="tabs" aria-label="页面导航">
+        <button class="tab active" data-panel="diaries" type="button">日记</button>
+        <button class="tab" data-panel="settings" type="button">插件配置</button>
+      </nav>
+
+      <section id="diaries" class="panel active">
+        <div class="diary-layout">
+          <aside class="card diary-sidebar">
+            <div class="section-heading">
+              <div>
+                <h2>日记列表</h2>
+                <p>选择一篇查看或编辑</p>
+              </div>
+              <label class="sr-only" for="date-picker">选择日期</label>
+              <input id="date-picker" type="date" />
+            </div>
+            <div id="diary-list" class="diary-list"></div>
+          </aside>
+
+          <article class="card editor">
+            <div class="section-heading editor-heading">
+              <div>
+                <h2 id="diary-title">选择一篇日记</h2>
+                <p id="diary-meta">也可以选择日期后新建或生成日记</p>
+              </div>
+              <div class="button-row">
+                <button id="generate-diary" class="button button-quiet" type="button" disabled>重新生成</button>
+                <button id="save-diary" class="button button-primary" type="button" disabled>保存日记</button>
+              </div>
+            </div>
+            <label class="sr-only" for="diary-content">日记正文</label>
+            <textarea id="diary-content" class="diary-content" placeholder="选择左侧日期以查看日记；没有日记时可以手动写或点击“生成日记”。" disabled></textarea>
+            <p id="diary-message" class="message" aria-live="polite"></p>
+          </article>
+        </div>
+      </section>
+
+      <section id="settings" class="panel">
+        <div class="card settings-card">
+          <div class="section-heading">
+            <div>
+              <h2>插件配置</h2>
+              <p>修改后立即保存并应用；写日记所用的人格与提示词也在这里调整。</p>
+            </div>
+            <button id="save-config" class="button button-primary" type="button">保存配置</button>
+          </div>
+          <div id="config-form" class="config-form"></div>
+          <p id="config-message" class="message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <footer>配置也可以在 AstrBot 插件详情页中查看。日记和配置均保存在 AstrBot 插件数据目录。</footer>
+    </main>
+  </body>
+</html>

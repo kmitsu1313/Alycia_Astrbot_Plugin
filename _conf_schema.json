@@ -1,0 +1,171 @@
+{
+  "log": {
+    "description": "📝 逐条记录",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用逐条记录",
+        "type": "bool",
+        "default": true,
+        "hint": "所有渠道、所有用户。每天一个 log/YYYY-MM-DD.jsonl，一行一条：时间、渠道、用户、对方说的话 / 她的思考 / 她的回复（好感度标签已剥掉，另存 favour_tags 字段）。"
+      },
+      "log_reasoning": {
+        "description": "记录模型思考内容",
+        "type": "bool",
+        "default": true,
+        "hint": "从原始 completion 的 reasoning 字段取（AstrBot 自带的「显示思考内容」对 ollama 取不到）。非流式才完整。"
+      },
+      "log_full_prompt": {
+        "description": "同时记录最终发给模型的用户侧 prompt",
+        "type": "bool",
+        "default": false,
+        "hint": "含其他插件注入的记忆、世界书等。文件会大很多；而且本插件钩子之后才注入的内容看不到。"
+      }
+    }
+  },
+  "diary": {
+    "description": "📔 日记（回顾前一天）",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用定时写日记",
+        "type": "bool",
+        "default": true
+      },
+      "write_time": {
+        "description": "每天几点写（回顾前一天）",
+        "type": "string",
+        "default": "04:30",
+        "hint": "HH:MM，容器本地时间（已设 Asia/Shanghai）。"
+      },
+      "catch_up_hours": {
+        "description": "错过写日记时间后，几小时内补写",
+        "type": "int",
+        "default": 6,
+        "hint": "比如 AstrBot 当时没开。超过这个时长就不自动补了，可用 /journal_diary 手动写。"
+      },
+      "persona_id": {
+        "description": "写日记用的人格 ID",
+        "type": "string",
+        "default": "",
+        "hint": "留空 = 当前默认人格。日记的系统提示词 = 人格提示词 + 下面的「追加说明」。"
+      },
+      "system_prompt_suffix": {
+        "description": "系统提示词追加说明（人格线写）",
+        "type": "text",
+        "default": "现在没有人在和你说话。你在写只给自己看的日记，想到哪写到哪，不用对任何人交代。",
+        "hint": "接在人格提示词后面，告诉她此刻是在写日记而不是聊天。"
+      },
+      "user_prompt": {
+        "description": "写日记的指令模板（人格线写）",
+        "type": "text",
+        "default": "今天是 {today}（{today_weekday}），回顾 {date}（{weekday}）这一天。\n\n{previous_diaries}\n\n【{date} 的对话】\n{conversation}\n\n{activity}\n\n写 {date} 的日记。只写正文，不要标题、不要日期行。",
+        "hint": "占位符：{date} {weekday} 被回顾的那天；{today} {today_weekday} 写的当天；{conversation} 那天的对话稿；{previous_diaries} 之前几篇日记；{activity} 那天的电脑活动摘要（需 ManicTime 数据）。"
+      },
+      "previous_count": {
+        "description": "附带最近几篇旧日记",
+        "type": "int",
+        "default": 3,
+        "hint": "让日记之间接得上。0 = 不附。"
+      },
+      "max_conversation_chars": {
+        "description": "对话稿最多多少字",
+        "type": "int",
+        "default": 24000,
+        "hint": "超了就截掉更早的部分。上下文现在是 64k token，24000 字约 1.5 万 token 以内。"
+      },
+      "include_reasoning": {
+        "description": "对话稿里带上她当时的思考",
+        "type": "bool",
+        "default": false,
+        "hint": "会让对话稿长很多，一般不用。"
+      },
+      "include_activity": {
+        "description": "附带那天的电脑活动摘要",
+        "type": "bool",
+        "default": true,
+        "hint": "来自 ManicTime 导出；没有数据就不附。"
+      },
+      "write_when_empty": {
+        "description": "那天没有对话也写",
+        "type": "bool",
+        "default": false
+      },
+      "save_reasoning": {
+        "description": "把写日记时的思考另存一份",
+        "type": "bool",
+        "default": true,
+        "hint": "diary/YYYY-MM-DD.reasoning.txt，只给人看，不会注入。"
+      }
+    }
+  },
+  "inject": {
+    "description": "📎 每轮对话附上最近一篇日记",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用",
+        "type": "bool",
+        "default": true,
+        "hint": "附在系统提示词末尾，不进对话历史。主动消息也附。"
+      },
+      "template": {
+        "description": "附带时的措辞（人格线写）",
+        "type": "text",
+        "default": "【你{relative}（{date} {weekday}）写的日记，只有你自己看过】\n{diary}",
+        "hint": "占位符：{diary} 日记正文；{date} {weekday}；{relative} 昨天/前天/N 天前。"
+      },
+      "max_chars": {
+        "description": "日记最多附多少字",
+        "type": "int",
+        "default": 2500
+      },
+      "max_age_days": {
+        "description": "日记超过几天就不附了",
+        "type": "int",
+        "default": 3,
+        "hint": "0 = 不限。"
+      }
+    }
+  },
+  "manictime": {
+    "description": "🖥️ 看一眼 ManicTime（宿主机导出）",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用",
+        "type": "bool",
+        "default": true,
+        "hint": "读 plugin_data/astrbot_plugin_alycia_journal/manictime/latest.json，由宿主机 host_tools/manictime_export.py 定时写入。"
+      },
+      "on_proactive": {
+        "description": "主动消息时附上",
+        "type": "bool",
+        "default": true
+      },
+      "on_reply": {
+        "description": "普通回复时也附上",
+        "type": "bool",
+        "default": false,
+        "hint": "每轮都看一眼。默认只在她主动开口时看。"
+      },
+      "max_age_minutes": {
+        "description": "数据多久算过期（分钟）",
+        "type": "int",
+        "default": 15,
+        "hint": "导出脚本默认 5 分钟一次。"
+      },
+      "inject_when_stale": {
+        "description": "过期了也附（注明多久前）",
+        "type": "bool",
+        "default": false
+      },
+      "template": {
+        "description": "附带时的措辞（人格线写）",
+        "type": "text",
+        "default": "【你顺手看了一眼对方电脑的屏幕时间记录】\n{summary}",
+        "hint": "占位符：{summary} 活动摘要；{generated_at} 导出时间。"
+      }
+    }
+  }
+}

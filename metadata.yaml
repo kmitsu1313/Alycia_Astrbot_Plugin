@@ -1,0 +1,14 @@
+name: astrbot_plugin_alycia_journal
+display_name: Alycia 日记与记录
+desc: 逐条记录各渠道对话（含模型思考），每天定时回顾前一天写一篇私人日记并在对话中回看，主动消息时看一眼 ManicTime 活动摘要。
+author: uuuiii13
+version: v0.1.0
+astrbot_version: ">=4.24.0"
+support_platforms:
+  - aiocqhttp
+  - qq_official
+  - weixin_oc
+tags:
+  - 日记
+  - 记录
+  - 拟人
